@@ -152,7 +152,13 @@ public class Simulator {
 		if (Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "simulate")) {
 			if (net == null) {
 				net = new Network(random_provider);
-				net.readFromFile(cmd.getOptionValue("network-input-file"), false);
+				if (Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "network-input-file")) {
+					net.readFromFile(cmd.getOptionValue("network-input-file"), false);
+				}
+				else {
+					String newick = cmd.getOptionValue("tree");
+					net.createFromNewick(newick);
+				}
 				net.printNetwork();
 				System.out.println("");
 				net.writeNetwork(null);
