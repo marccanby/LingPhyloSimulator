@@ -1,0 +1,10 @@
+,phon,morph,lex
+nchar,30,30,30
+sigma_dlc,0.2,0.2,0.2
+sigma_het,0.2,0.2,0.2
+dlc_is_individual,TRUE,FALSE,FALSE
+height_factor,0.1,1.0,3.0
+mu_trm_site,0.5,0.5,0.5
+sigma_trm_site,0.05,0.05,0.05
+h_root,0.0,0.1,0.1
+h_factor,0.0,0.1,0.1
