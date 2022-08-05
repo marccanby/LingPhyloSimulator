@@ -16,14 +16,11 @@ public class ReticulateEdge {
         right = r;
     }
 
-    public static double drawTransmissionStrength(double mu_trm, double sigma_trm, RandomProvider randomProvider) {
+    public static double drawTransmissionStrength(RandomProvider randomProvider) {
+        // NOTE: Random provider already has gamma distribution with correct alpha and beta for this purpose.
         double draw_value = -1;
-        if (sigma_trm == 0) {
-            draw_value = mu_trm;
-        } else {
-            draw_value = randomProvider.nextGaussian(randomProvider.indexMapping.get("topology"));
-            draw_value = draw_value * sigma_trm + mu_trm; // transform into N(mu, sigma^2)
-        }
+        draw_value = randomProvider.nextGamma(randomProvider.indexMapping.get("topology"));
+        assert draw_value > 0 && draw_value < 1;
         return draw_value;
     }
 

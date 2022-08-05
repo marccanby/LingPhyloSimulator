@@ -1,9 +1,6 @@
 package Main;
 
-import umontreal.ssj.probdist.NormalDist;
-import umontreal.ssj.randvar.NormalGen;
-import umontreal.ssj.rng.GenF2w32;
-import umontreal.ssj.rng.RandomStream;
+import org.apache.commons.math3.distribution.GammaDistribution;
 
 import java.util.Random;
 
@@ -12,60 +9,55 @@ import java.util.Random;
 
 public class RandomWrapper {
 	public final int seed;
-	public final boolean use_libssj;
 	public final Random java_generator;
-	public final RandomStream ssj_generator;
+	public final GammaDistribution gamma_distribution;
 
-	public RandomWrapper(boolean my_libssj,
-                         int my_seed,
-						 int discard) { // Number of first draws to be discarded initially from the random stream;
+	public RandomWrapper(int my_seed,
+						 int discard,
+						 double gamma_alpha,
+						 double gamma_beta) { // Number of first draws to be discarded initially from the random stream;
 		seed = my_seed;
-		use_libssj = my_libssj;
 		java_generator = new Random((long)my_seed);
 		for (int i = 0; i < discard ;i++) {
 			java_generator.nextDouble();
 		}
-		if (use_libssj) {
-			int[] seed = new int[25];
-			for (int i = 0; i< 25; i++) {
-				seed[i] = java_generator.nextInt();
+
+		assert (gamma_alpha == -1 && gamma_beta == -1) || (gamma_alpha > 0 && gamma_beta > 0);
+		if (gamma_alpha != -1) {
+			// NOTE: This class uses the k-theta parametrization on wikipedia. so have to convert
+			double k = gamma_alpha;
+			double theta = 1/gamma_beta;
+			gamma_distribution = new GammaDistribution(k, theta);
+			for (int i = 0; i < discard ;i++) {
+				gamma_distribution.sample();
 			}
-			GenF2w32.setPackageSeed(seed);
-			ssj_generator = new GenF2w32();
-		} else {
-			ssj_generator = null;
 		}
+		else {
+			gamma_distribution = null;
+		}
+
 	}
 
 	public double nextDouble() {
 		double result;
-		if (use_libssj) {
-			result = ssj_generator.nextDouble();
-		} else {
-			result = java_generator.nextDouble();
-		}
+		result = java_generator.nextDouble();
 		return result;
 	}
 
 	public double nextGaussian() {
 		double result;
-		if (use_libssj) {
-			NormalDist normal_dist = new NormalDist();
-			NormalGen normal_gen = new NormalGen(ssj_generator,
-							     normal_dist);
-			result = normal_gen.nextDouble();
-		} else {
-			result = java_generator.nextGaussian();
-		}
+		result = java_generator.nextGaussian();
 		return result;
 	}
 
-	public RandomStream getStream() {
-		if (!use_libssj) {
-			System.out.println("SSJ object requested in non-ssj mode");
-			System.out.println("in RamdomWrapper. Should stop now.");
-		}
-		return ssj_generator;
+	public double nextGamma() {
+		assert gamma_distribution != null;
+		double result;
+		result = gamma_distribution.sample();
+		assert result > 0;
+		if (result > 1) result = 1.0; // Force it not to be greater than 1......
+		return result;
 	}
+
 }
 

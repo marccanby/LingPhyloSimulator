@@ -9,28 +9,23 @@ import java.util.HashMap;
 
 public class RandomProvider {
 
-	public final boolean use_libssj;
 	public RandomWrapper[] wrappers;
 	public HashMap<String, Integer> indexMapping;
 
-	public RandomProvider() {
-		wrappers = new RandomWrapper[4];
+	public RandomProvider(double gamma_alpha, double gamma_beta) {
+		wrappers = new RandomWrapper[3];
 		int topology_random_seed = 1;
-		int ultrametric_random_seed = 1;
 		int rates_random_seed = 1;
 		int evolution_random_seed = 1;
 		int discard = 100;
-		use_libssj = false;
 
 		indexMapping =  new HashMap<String, Integer>();
 		indexMapping.put("topology", 0);
-		indexMapping.put("ultrametric", 1);
-		indexMapping.put("rates", 2);
-		indexMapping.put("evolution", 3);
-		wrappers[indexMapping.get("topology")] = new RandomWrapper(use_libssj, topology_random_seed, discard); // topology
-		wrappers[indexMapping.get("ultrametric")] = new RandomWrapper(use_libssj, ultrametric_random_seed, discard); // ultrametric
-		wrappers[indexMapping.get("rates")] = new RandomWrapper(use_libssj,  rates_random_seed, discard); // rates
-		wrappers[indexMapping.get("evolution")] = new RandomWrapper(use_libssj, evolution_random_seed, discard); // evolution
+		indexMapping.put("rates", 1);
+		indexMapping.put("evolution", 2);
+		wrappers[indexMapping.get("topology")] = new RandomWrapper(topology_random_seed, discard, gamma_alpha, gamma_beta); // topology
+		wrappers[indexMapping.get("rates")] = new RandomWrapper(rates_random_seed, discard, gamma_alpha, gamma_beta); // rates
+		wrappers[indexMapping.get("evolution")] = new RandomWrapper(evolution_random_seed, discard, gamma_alpha, gamma_beta); // evolution
 	}
 
 	public double nextDouble(int type) {
@@ -43,6 +38,7 @@ public class RandomProvider {
 		} else {
 			System.out.println("Invalid random number type requested");
 			System.out.println("in Main.RandomProvider.java. Should stop now");
+			assert false;
 		}
 		return result;
 	}
@@ -58,22 +54,23 @@ public class RandomProvider {
 		} else {
 			System.out.println("Invalid random number type requested");
 			System.out.println("in Main.RandomProvider.java. Should stop now");
+			assert false;
 		}
 		return result;
 	}
 
-	public RandomStream getStream(int type) {
-		RandomStream result = null;
-		if (type >= wrappers.length) {
+	public double nextGamma(int type) {
+		//Returns a number from Gamma(alpha, beta)
+		double result = 0.0;
+		if (type < wrappers.length) {
+			RandomWrapper my_wrapper = wrappers[type];
+			result = my_wrapper.nextGamma();
+		} else {
 			System.out.println("Invalid random number type requested");
 			System.out.println("in Main.RandomProvider.java. Should stop now");
-		} else if (!use_libssj) {
-			System.out.println("Not using SSJ: cannot request RandomStream");
-			System.out.println("in Main.RandomProvider.java.Should stop now");
-		} else {	
-			RandomWrapper my_wrapper = wrappers[type];
-			result = my_wrapper.getStream();
+			assert false;
 		}
 		return result;
 	}
+
 }

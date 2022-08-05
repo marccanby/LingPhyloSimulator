@@ -61,7 +61,7 @@ public class Network {
         makeReticulateEdges(pairsToCreate, renumber_network);
     }
 
-    public void addReticulateEdges(int number, double epsilon, double mu_trm, double sigma_trm, boolean renumber_network) {
+    public void addReticulateEdges(int number, double epsilon, boolean renumber_network) {
         // Note: Fairly well tested under normal circumstances, but not under many edge cases (multiple splits per edge, high number of contact edges, etc)
 
         // First get edges, nodes, and lcas
@@ -160,7 +160,7 @@ public class Network {
             double draw2 = randomProvider.nextDouble(randomProvider.indexMapping.get("topology"));
             double contact_time = t_0 + (t_1 - t_0) * Math.exp(draw2 * Math.log((t_2-t_0)/(t_1-t_0)));
 
-            double strength = ReticulateEdge.drawTransmissionStrength(mu_trm, sigma_trm, randomProvider);
+            double strength = ReticulateEdge.drawTransmissionStrength(randomProvider);
 
             // Store edge and remove from scores.
             pairsToCreate.put(selected_pair, new Pair<>(contact_time, strength));
@@ -250,7 +250,9 @@ public class Network {
     public void writeNetwork(String save_file) {
         String ret = UnderlyingNewick;
         HashSet<ReticulateEdge> retEdges = findRetEdges(RootNode);
-        for (ReticulateEdge edge : retEdges) {
+        for (int cnt = 1; cnt <= retEdges.size(); cnt++) { // Iterate over them in order they were created
+            ReticulateEdge edge = (ReticulateEdge) retEdges.toArray()[0];
+            for (ReticulateEdge e : retEdges) if (e.Id == cnt) edge = e;
             ArrayList<Edge> lout = edge.left.OutgoingEdges;
             ArrayList<Edge> rout = edge.right.OutgoingEdges;
             assert lout.size() == 1 && rout.size() == 1;

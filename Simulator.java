@@ -71,14 +71,17 @@ public class Simulator {
 			assert !Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "epsilon") : "epsilon must not be present if generate-network is not";
 			assert !Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "mu-transmission") : "mu-transmission must not be present if generate-network is not";
 			assert !Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "sigma-transmission") : "sigma-transmission must not be present if generate-network is not";
-			assert !Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "tree") : "tree must not be present if generate-network is not";
+			// assert !Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "tree") : "tree must not be present if generate-network is not";
 			assert !Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "save-network-file"): "snetfile must not be present if generate-network is not";
 
 		}
 
 		if (Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "simulate")) {
 			if (!Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "generate-network")) {
-				assert Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "network-input-file") : "network-input-file must be provided if network was not generated";
+				boolean ninpfileprovided = Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "network-input-file");
+				boolean treeprovided = Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "tree");
+				assert !(ninpfileprovided && treeprovided) : "You cannot provide both tree and network-input-file when simulate is selected.";
+				assert ninpfileprovided || treeprovided : "tree or network-input-file (but not both) must be provided if network was not generated";
 			}
 			assert Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "sim-output-file") : "Must specify CSV file into which to save simulations if simulate enabled";
 			assert Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "sim-params-file") : "Must specify CSV file with character class parameters if simulate enabled";
@@ -110,7 +113,17 @@ public class Simulator {
 
 		checkOptions(cmd);
 
-		RandomProvider random_provider = new RandomProvider();
+		double gamma_alpha = -1;
+		double gamma_beta = -1;
+		if (Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "generate-network")) {
+			double mu = Double.parseDouble(cmd.getOptionValue("mu-transmission"));
+			double sigma = Double.parseDouble(cmd.getOptionValue("sigma-transmission"));
+			assert mu > 0 && mu < 1;
+			assert sigma > 0 && sigma < 1;
+			gamma_alpha = Math.pow(mu, 2) / Math.pow(sigma, 2);
+			gamma_beta = mu / Math.pow(sigma, 2);
+		}
+		RandomProvider random_provider = new RandomProvider(gamma_alpha, gamma_beta);
 
 
 		// BUILD NETWORK
@@ -129,8 +142,6 @@ public class Simulator {
 
 			net.addReticulateEdges(Integer.parseInt(cmd.getOptionValue("num-edges")),
 					Float.parseFloat(cmd.getOptionValue("epsilon")),
-					Float.parseFloat(cmd.getOptionValue("mu-transmission")),
-					Float.parseFloat(cmd.getOptionValue("sigma-transmission")),
 					false);
 			// Note: If want to set all transmission strengths to 0.5, set mu_trm = 0.5 and sigma_trm = 0.0
 			net.printNetwork();
