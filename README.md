@@ -27,3 +27,6 @@ To simulate character data, you must provide either a tree or network. You must 
 * <code>--tree</code> or <code>--network-input-file</code>: You must provide one of these two parameters. If you wish to simulate down a tree, provide <code>--tree</code> in the same format as above. If you wish to simulate down a network, provide <code>--network-input-file</code> with the file containing the network saved from the previous step.
 * <code>--sim-params-file</code>: A CSV containing parameters for the Character Class of the evolution model you are using to generate data.
 * <code>--sim-output-file</code>: A CSV file in which you want to save the simulated sequences.
+
+<br><br>
+<b>How to Add a New Model of Evolution</b><br>
