@@ -1,0 +1,14 @@
+,mh,mnh,lpsh,lpsnh,lpmh,lpmnh,lphh,lphnh,lnpsh,lnpsnh,lnpmh,lnpmsh,lnphh,lnphnh
+nchar,5,15,8,58,10,58,8,58,4,29,5,29,4,29
+weight,50,50,1,1,1,1,1,1,1,1,1,1,1,1
+sigma_dlc,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3
+sigma_het,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2,1.2
+dlc_is_individual,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE
+height_factor,5,5,5,5,10,10,20,20,5,5,10,10,20,20
+alpha_trm_site,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+beta_trm_site,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+h_root,0.2,0,0.2,0,0.2,0,0.2,0,0.2,0,0.2,0,0.2,0
+h_factor,0.2,0,0.2,0,0.2,0,0.2,0,0.2,0,0.2,0,0.2,0
+birth_rate,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+death_rate,10000,10000,4,4,4,4,4,4,10000,10000,10000,10000,10000,10000
+death_power,1,1,1,1,1,1,1,1,1,1,1,1,1,1
