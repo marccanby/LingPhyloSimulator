@@ -26,7 +26,7 @@ To simulate character data, you must provide either a tree or network. You must 
 * <code>--tree</code> or <code>--network-input-file</code>: You must provide one of these two parameters. If you wish to simulate down a tree, provide <code>--tree</code> in the same format as above. If you wish to simulate down a network, provide <code>--network-input-file</code> with the file containing the network saved from the previous step.
 * <code>--sim-params-file</code>: A CSV containing parameters for the Character Class of the evolution model you are using to generate data.
 * <code>--sim-output-file</code>: A CSV file in which to save the simulated sequences.
-* <code>--sim-char-class</code>: The name of the Character Class corresponding to the evolution model you want to use. Currently must be <code>CharacterClass</code> (in the case of the Warnow et al. 2006 model) or <code>PolymorphicCharacterClass</code> (in the case of the polymorphism model of Anonymous authors 2023). See below for adding a new type of Character Class.
+* <code>--sim-char-class</code>: The name of the Character Class corresponding to the evolution model you want to use. Currently must be <code>CharacterClass</code> (in the case of the Warnow et al. 2006 model) or <code>PolymorphicCharacterClass</code> (in the case of the polymorphism model of Canby et al., 2023). See below for adding a new type of Character Class.
 
 For example, if you want to simulate down a tree under the polymorphic model with parameters specified in <code>config.csv</code> and save the result in <code>sequences.csv</code>, you could use the parameters:
 
@@ -35,7 +35,7 @@ For example, if you want to simulate down a tree under the polymorphic model wit
 Example configuration files are provided in the <code>example/configs/</code>. The resulting simulated data can then be used as input to a variety of tree (or network) estimation methods. We provide commands for software we used in <code>software_commands.pdf</code>.
 <br><br>
 <b>How to Add a New Model of Evolution</b><br>
-So far, only two evolution models (i.e. Character Class) are implemented: <code>CharacterClass</code> (for the Warnow et al. 2006 model) and <code>PolymorphicCharacterClass</code> (for the polymorphism model of Anonymous authors 2023). To add a new model of evolution, a similar format must be followed. First, you must add files <code>NewCharacter.java</code> (inheriting <code>AbstractCharacter</code>) and <code>NewCharacterClass.java</code> (inheriting <code>AbstractCharacterClass</code>).
+So far, only two evolution models (i.e. Character Class) are implemented: <code>CharacterClass</code> (for the Warnow et al. 2006 model) and <code>PolymorphicCharacterClass</code> (for the polymorphism model of Canby et al., 2023). To add a new model of evolution, a similar format must be followed. First, you must add files <code>NewCharacter.java</code> (inheriting <code>AbstractCharacter</code>) and <code>NewCharacterClass.java</code> (inheriting <code>AbstractCharacterClass</code>).
 
 The <code>NewCharacterClass</code> provides a template for parameters specific to the model (e.g. relevant substitution probabilities or birth rates) and implements a function <code>generateCharacter(...)</code> that instantiates a character of this class. The <code>NewCharacter</code> class is used to represent individual instances of the character. In this case, one must implement 3 functions:
 * <code>getRootState()</code>: Returns the state (or set of states) that begin the evolution at the root of the tree.
