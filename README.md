@@ -1,6 +1,6 @@
 # LingPhyloSimulator
 
-This is the code belonging to an article under review (Canby et al., 2024). The paper presents a model for linguistic polymorphism (primarily focused on lexical polymorphism); this repo contains the code to simulate character evolution down trees and phylogenetic networks under this model (and can be easily extended to simulate under other models). It is based loosely on the simulator used in Barbançon et al., 2013. Furthermore, the repo includes commands that can be used to infer the underlying evolutionary trees from the data, as well as simulated trees, networks, and datasets. Finally, the repo contains a new Indo-European dataset, extended and corrected from the dataset presented in Ringe et al., 2002.
+This is the code belonging to [Addressing Polymorphism in Linguistic Phylogenetics](https://onlinelibrary.wiley.com/doi/10.1111/1467-968X.12289) (Canby et al., 2024). The paper presents a model for linguistic polymorphism (primarily focused on lexical polymorphism); this repo contains the code to simulate character evolution down trees and phylogenetic networks under this model (and can be easily extended to simulate under other models). It is based loosely on the simulator used in Barbançon et al., 2013. Furthermore, the repo includes commands that can be used to infer the underlying evolutionary trees from the data, as well as simulated trees, networks, and datasets. Finally, the repo contains a new Indo-European dataset, extended and corrected from the dataset presented in Ringe et al., 2002.
 
 There are two steps to the simulator: <b>network generation</b> and <b>character simulation</b>. If you just want to simulate down a tree, you may skip the network generation step. For an algorithmic description of the simulator, see <code>algorithmic_description.pdf</code>.
 
@@ -26,7 +26,7 @@ To simulate character data, you must provide either a tree or network. You must 
 * <code>--tree</code> or <code>--network-input-file</code>: You must provide one of these two parameters. If you wish to simulate down a tree, provide <code>--tree</code> in the same format as above. If you wish to simulate down a network, provide <code>--network-input-file</code> with the file containing the network saved from the previous step.
 * <code>--sim-params-file</code>: A CSV containing parameters for the Character Class of the evolution model you are using to generate data.
 * <code>--sim-output-file</code>: A CSV file in which to save the simulated sequences.
-* <code>--sim-char-class</code>: The name of the Character Class corresponding to the evolution model you want to use. Currently must be <code>CharacterClass</code> (in the case of the Warnow et al. 2006 model) or <code>PolymorphicCharacterClass</code> (in the case of the polymorphism model of Canby et al., 2023). See below for adding a new type of Character Class.
+* <code>--sim-char-class</code>: The name of the Character Class corresponding to the evolution model you want to use. Currently must be <code>CharacterClass</code> (in the case of the Warnow et al. 2006 model) or <code>PolymorphicCharacterClass</code> (in the case of the polymorphism model of Canby et al., 2024). See below for adding a new type of Character Class.
 
 For example, if you want to simulate down a tree under the polymorphic model with parameters specified in <code>config.csv</code> and save the result in <code>sequences.csv</code>, you could use the parameters:
 
@@ -35,7 +35,7 @@ For example, if you want to simulate down a tree under the polymorphic model wit
 Example configuration files are provided in the <code>example/configs/</code>. The resulting simulated data can then be used as input to a variety of tree (or network) estimation methods. We provide commands for software we used in <code>software_commands.pdf</code>.
 <br><br>
 <b>How to Add a New Model of Evolution</b><br>
-So far, only two evolution models (i.e. Character Class) are implemented: <code>CharacterClass</code> (for the Warnow et al. 2006 model) and <code>PolymorphicCharacterClass</code> (for the polymorphism model of Canby et al., 2023). To add a new model of evolution, a similar format must be followed. First, you must add files <code>NewCharacter.java</code> (inheriting <code>AbstractCharacter</code>) and <code>NewCharacterClass.java</code> (inheriting <code>AbstractCharacterClass</code>).
+So far, only two evolution models (i.e. Character Class) are implemented: <code>CharacterClass</code> (for the Warnow et al. 2006 model) and <code>PolymorphicCharacterClass</code> (for the polymorphism model of Canby et al., 2024). To add a new model of evolution, a similar format must be followed. First, you must add files <code>NewCharacter.java</code> (inheriting <code>AbstractCharacter</code>) and <code>NewCharacterClass.java</code> (inheriting <code>AbstractCharacterClass</code>).
 
 The <code>NewCharacterClass</code> provides a template for parameters specific to the model (e.g. relevant substitution probabilities or birth rates) and implements a function <code>generateCharacter(...)</code> that instantiates a character of this class. The <code>NewCharacter</code> class is used to represent individual instances of the character. In this case, one must implement 3 functions:
 * <code>getRootState()</code>: Returns the state (or set of states) that begin the evolution at the root of the tree.
@@ -55,10 +55,10 @@ Example configurations, trees, networks, and simulated data under these trees an
 <br>
 <b>References</b>
 
-F. Barbançon, S. N. Evans, L. Nakhleh, D. Ringe, and T. Warnow. An experimental study comparing linguistic phylogenetic reconstruction methods. Diachronica, 30(2):143–170, 2013.
+F. Barbançon, S. N. Evans, L. Nakhleh, D. Ringe, and T. Warnow (2013), An experimental study comparing linguistic phylogenetic reconstruction methods. Diachronica, 30(2):143–170.
 
-M. Canby, et al. Addressing Polymorphism in Linguistic Phylogenetics. Under review, 2024.
+Canby, M.E., Evans, S.N., Ringe, D. and Warnow, T. (2024), [Addressing Polymorphism in Linguistic Phylogenetics](https://onlinelibrary.wiley.com/doi/10.1111/1467-968X.12289). Trans Philologic Soc.
 
-D. Ringe, T. Warnow, and A. Taylor. Indo-European and computational cladistics. Transactions of the Philological Society, 100(1):59–129, 2002.
+D. Ringe, T. Warnow, and A. Taylor (2002), Indo-European and computational cladistics. Transactions of the Philological Society, 100(1):59–129.
 
-T. Warnow, S. N. Evans, D. , and L. Nakhleh. A stochastic model of language evolution that incorporates homoplasy and borrowing. In P. Forster and C. Renfrew, editors, Phylogenetic Methods and the Prehistory of Languages, pages 75–90. Cambridge: McDonald Institute for Archaeological Research, 2006.
+T. Warnow, S. N. Evans, D. , and L. Nakhleh (2006) A stochastic model of language evolution that incorporates homoplasy and borrowing. In P. Forster and C. Renfrew, editors, Phylogenetic Methods and the Prehistory of Languages, pages 75–90. Cambridge: McDonald Institute for Archaeological Research.
