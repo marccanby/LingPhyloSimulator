@@ -131,7 +131,12 @@ public class Simulator {
 
 		boolean noprint = Arrays.stream(cmd.getOptions()).anyMatch(x -> ((Option) x).getLongOpt() == "no-print");
 
-		RandomProvider random_provider = new RandomProvider(Integer.parseInt(cmd.getOptionValue("seed")));
+		int seedVal = cmd.hasOption("seed")
+		    ? Integer.parseInt(cmd.getOptionValue("seed"))
+		    : (int) System.currentTimeMillis();
+
+		RandomProvider random_provider = new RandomProvider(seedVal);
+
 
 
 		// BUILD NETWORK
