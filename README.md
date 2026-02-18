@@ -4,7 +4,7 @@ This is the code belonging to [Addressing Polymorphism in Linguistic Phylogeneti
 
 There are two steps to the simulator: <b>network generation</b> and <b>character simulation</b>. If you just want to simulate down a tree, you may skip the network generation step. For an algorithmic description of the simulator, see <code>algorithmic_description.pdf</code>.
 
-<b>Tree Generation</br><br>
+<b>Tree Generation</b><br>
 To generate trees, we use an R script `tree_generation.R`. You can set the number of taxa and other parameters at the top. This outputs a Nexus file with simulated trees of height 1.0.
 
 <b>Network Generation</b><br>
